@@ -49,7 +49,10 @@ type Mediafile struct {
 	rtmpLive              string
 	hlsPlaylistType       string
 	hlsListSize           int
+	hlsWrapSize           int
 	hlsSegmentDuration    int
+	hlsSegmentFilename    string
+	hlsStartNumber        int
 	httpMethod            string
 	httpKeepAlive         bool
 	streamIds             map[int]string
@@ -216,8 +219,20 @@ func (m *Mediafile) SetHlsListSize(val int) {
 	m.hlsListSize = val
 }
 
+func (m *Mediafile) SetHlsWrapSize(val int) {
+	m.hlsWrapSize = val
+}
+
 func (m *Mediafile) SetHlsSegmentDuration(val int) {
 	m.hlsSegmentDuration = val
+}
+
+func (m *Mediafile) SetHlsSegmentFilename(val string) {
+	m.hlsSegmentFilename = val
+}
+
+func (m *Mediafile) SetHlsStartNumber(val int) {
+	m.hlsStartNumber = val
 }
 
 func (m *Mediafile) SetHlsPlaylistType(val string) {
@@ -414,8 +429,20 @@ func (m *Mediafile) HlsListSize() int {
 	return m.hlsListSize
 }
 
+func (m *Mediafile) HlsWrapSize() int {
+	return m.hlsWrapSize
+}
+
 func (m *Mediafile) HlsSegmentDuration() int {
 	return m.hlsSegmentDuration
+}
+
+func (m *Mediafile) SegmentFilename() string {
+	return m.hlsSegmentFilename
+}
+
+func (m *Mediafile) HlsStartNumber() int {
+	return m.hlsStartNumber
 }
 
 func (m *Mediafile) HlsPlaylistType() string {
@@ -495,8 +522,11 @@ func (m *Mediafile) ToStrCommand() []string {
 		"CopyTs",
 		"StreamIds",
 		"OutputFormat",
+		"HlsStartNumber",
 		"HlsListSize",
+		"HlsWrapSize",
 		"HlsSegmentDuration",
+		"HlsSegmentFilename",
 		"HlsPlaylistType",
 		"Filter",
 		"HttpMethod",
@@ -797,13 +827,41 @@ func (m *Mediafile) ObtainInputInitialOffset() []string {
 	}
 }
 
+func (m *Mediafile) ObtainHlsStartNumber() []string {
+	if m.hlsStartNumber != 0 {
+		return []string{"-start_number", fmt.Sprintf("%d", m.hlsStartNumber)}
+	} else {
+		return nil
+	}
+}
+
 func (m *Mediafile) ObtainHlsListSize() []string {
-	return []string{"-hls_list_size", fmt.Sprintf("%d", m.hlsListSize)}
+	if m.hlsListSize != 0 {
+		return []string{"-hls_list_size", fmt.Sprintf("%d", m.hlsListSize)}
+	} else {
+		return nil
+	}
+}
+
+func (m *Mediafile) ObtainHlsWrapSize() []string {
+	if m.hlsWrapSize != 0 {
+		return []string{"-hls_wrap", fmt.Sprintf("%d", m.hlsWrapSize)}
+	} else {
+		return nil
+	}
 }
 
 func (m *Mediafile) ObtainHlsSegmentDuration() []string {
 	if m.hlsSegmentDuration != 0 {
 		return []string{"-hls_time", fmt.Sprintf("%d", m.hlsSegmentDuration)}
+	} else {
+		return nil
+	}
+}
+
+func (m *Mediafile) ObtainHlsSegmentFilename() []string {
+	if m.hlsSegmentFilename != "" {
+		return []string{"-hls_segment_filename", fmt.Sprintf("%s", m.hlsSegmentFilename)}
 	} else {
 		return nil
 	}
