@@ -4,13 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/xfrr/goffmpeg/ffmpeg"
 	"github.com/xfrr/goffmpeg/models"
 	"github.com/xfrr/goffmpeg/utils"
 	"io"
-	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -72,7 +70,7 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 		fmt.Println(err)
 		return err
 	}
-
+/*
 	if inputPath == "" {
 		return errors.New("error: transcoder.Initialize -> inputPath missing")
 	}
@@ -81,7 +79,7 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 	if os.IsNotExist(err) {
 		return errors.New("error: transcoder.Initialize -> input file not found")
 	}
-
+*/
 	command := []string{"-i", inputPath, "-print_format", "json", "-show_format", "-show_streams", "-show_error"}
 
 	cmd := exec.Command(configuration.FfprobeBin, command...)
