@@ -9,6 +9,7 @@ import (
 
 type Mediafile struct {
 	aspect                string
+	async                 bool
 	resolution            string
 	videoBitRate          int
 	videoBitRateTolerance int
@@ -195,6 +196,10 @@ func (m *Mediafile) SetHideBanner(val bool) {
 	m.hideBanner = val
 }
 
+func (m *Mediafile) SetAsync(val bool) {
+	m.async = val
+}
+
 func (m *Mediafile) SetMuxDelay(val string) {
 	m.muxDelay = val
 }
@@ -275,6 +280,10 @@ func (m *Mediafile) Filter() string {
 
 func (m *Mediafile) Aspect() string {
 	return m.aspect
+}
+
+func (m *Mediafile) Async() bool {
+	return m.async
 }
 
 func (m *Mediafile) Resolution() string {
@@ -531,6 +540,7 @@ func (m *Mediafile) ToStrCommand() []string {
 		"Filter",
 		"HttpMethod",
 		"HttpKeepAlive",
+		"Async",
 		"OutputPath",
 	}
 	for _, name := range opts {
@@ -778,6 +788,13 @@ func (m *Mediafile) ObtainAudioProfile() []string {
 func (m *Mediafile) ObtainCopyTs() []string {
 	if m.copyTs {
 		return []string{"-copyts"}
+	}
+	return nil
+}
+
+func (m *Mediafile) ObtainAsync() []string {
+	if m.copyTs {
+		return []string{"-async 1"}
 	}
 	return nil
 }

@@ -70,39 +70,39 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 		fmt.Println(err)
 		return err
 	}
-/*
-	if inputPath == "" {
-		return errors.New("error: transcoder.Initialize -> inputPath missing")
-	}
+	/*
+		if inputPath == "" {
+			return errors.New("error: transcoder.Initialize -> inputPath missing")
+		}
 
-	_, err = os.Stat(inputPath)
-	if os.IsNotExist(err) {
-		return errors.New("error: transcoder.Initialize -> input file not found")
-	}
-
-
-	command := []string{"-i", inputPath, "-print_format", "json", "-show_format", "-show_streams", "-show_error"}
+		_, err = os.Stat(inputPath)
+		if os.IsNotExist(err) {
+			return errors.New("error: transcoder.Initialize -> input file not found")
+		}
 
 
-	cmd := exec.Command(configuration.FfprobeBin, command...)
+		command := []string{"-i", inputPath, "-print_format", "json", "-show_format", "-show_streams", "-show_error"}
 
-	var out bytes.Buffer
-	cmd.Stdout = &out
 
-	err = cmd.Run()
-	if err != nil {
-		return fmt.Errorf("Failed FFPROBE (%s) with %s, message %s", command, err, out.String())
-	}
+		cmd := exec.Command(configuration.FfprobeBin, command...)
 
-	var Metadata models.Metadata
+		var out bytes.Buffer
+		cmd.Stdout = &out
 
-	if err = json.Unmarshal([]byte(out.String()), &Metadata); err != nil {
-		return err
-	}
-*/
+		err = cmd.Run()
+		if err != nil {
+			return fmt.Errorf("Failed FFPROBE (%s) with %s, message %s", command, err, out.String())
+		}
+
+		var Metadata models.Metadata
+
+		if err = json.Unmarshal([]byte(out.String()), &Metadata); err != nil {
+			return err
+		}
+	*/
 	// Set new Mediafile
 	MediaFile := new(models.Mediafile)
-//	MediaFile.SetMetadata(Metadata)
+	//	MediaFile.SetMetadata(Metadata)
 	MediaFile.SetInputPath(inputPath)
 	MediaFile.SetOutputPath(outputPath)
 	// Set transcoder configuration
