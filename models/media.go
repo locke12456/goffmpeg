@@ -793,7 +793,8 @@ func (m *Mediafile) ObtainCopyTs() []string {
 }
 
 func (m *Mediafile) ObtainAsync() []string {
-	if m.copyTs {
+
+	if m.async {
 		return []string{"-async 1"}
 	}
 	return nil

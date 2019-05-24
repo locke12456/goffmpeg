@@ -13,6 +13,9 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"os"
+	"encoding/json"
+	"errors"
 )
 
 type Transcoder struct {
@@ -70,19 +73,20 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 		fmt.Println(err)
 		return err
 	}
-	/*
-		if inputPath == "" {
-			return errors.New("error: transcoder.Initialize -> inputPath missing")
-		}
+	if inputPath == "" {
+		return errors.New("error: transcoder.Initialize -> inputPath missing")
+	}
 
+	// Set new Mediafile
+	MediaFile := new(models.Mediafile)
+
+	if !strings.Contains(inputPath, "udp") {
 		_, err = os.Stat(inputPath)
 		if os.IsNotExist(err) {
 			return errors.New("error: transcoder.Initialize -> input file not found")
 		}
 
-
 		command := []string{"-i", inputPath, "-print_format", "json", "-show_format", "-show_streams", "-show_error"}
-
 
 		cmd := exec.Command(configuration.FfprobeBin, command...)
 
@@ -99,19 +103,14 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 		if err = json.Unmarshal([]byte(out.String()), &Metadata); err != nil {
 			return err
 		}
-	*/
-	// Set new Mediafile
-	MediaFile := new(models.Mediafile)
-	//	MediaFile.SetMetadata(Metadata)
+		MediaFile.SetMetadata(Metadata)
+	}
 	MediaFile.SetInputPath(inputPath)
 	MediaFile.SetOutputPath(outputPath)
 	// Set transcoder configuration
-
 	t.SetMediaFile(MediaFile)
 	t.SetConfiguration(configuration)
-
 	return nil
-
 }
 
 func (t *Transcoder) Run(progress bool) <-chan error {
