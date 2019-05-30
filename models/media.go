@@ -15,6 +15,7 @@ type Mediafile struct {
 	videoBitRateTolerance int
 	videoMaxBitRate       int
 	videoMinBitrate       int
+	videoPreset       	  string
 	videoCodec            string
 	vframes               int
 	frameRate             int
@@ -94,6 +95,10 @@ func (m *Mediafile) SetVideoMinBitRate(v int) {
 
 func (m *Mediafile) SetVideoCodec(v string) {
 	m.videoCodec = v
+}
+
+func (m *Mediafile) SetVideoPreset(v string) {
+	m.videoPreset = v
 }
 
 func (m *Mediafile) SetVframes(v int) {
@@ -310,6 +315,10 @@ func (m *Mediafile) VideoCodec() string {
 	return m.videoCodec
 }
 
+func (m *Mediafile) VideoPreset() string {
+	return m.videoPreset
+}
+
 func (m *Mediafile) Vframes() int {
 	return m.vframes
 }
@@ -510,6 +519,7 @@ func (m *Mediafile) ToStrCommand() []string {
 		"VideoBitRateTolerance",
 		"VideoMaxBitRate",
 		"VideoMinBitRate",
+		"VideoPreset",
 		"VideoProfile",
 		"SkipVideo",
 		"AudioCodec",
@@ -750,6 +760,13 @@ func (m *Mediafile) ObtainPreset() []string {
 	return nil
 }
 
+func (m *Mediafile) ObtainVideoPreset() []string {
+	if m.preset != "" {
+		return []string{"-preset:v", m.videoPreset}
+	}
+	return nil
+}
+
 func (m *Mediafile) ObtainTune() []string {
 	if m.tune != "" {
 		return []string{"-tune", m.tune}
@@ -793,7 +810,6 @@ func (m *Mediafile) ObtainCopyTs() []string {
 }
 
 func (m *Mediafile) ObtainAsync() []string {
-
 	if m.async {
 		return []string{"-async 1"}
 	}
