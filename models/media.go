@@ -550,7 +550,7 @@ func (m *Mediafile) ToStrCommand() []string {
 		"Filter",
 		"HttpMethod",
 		"HttpKeepAlive",
-		//"Async",
+		"Async",
 		"OutputPath",
 	}
 	for _, name := range opts {
